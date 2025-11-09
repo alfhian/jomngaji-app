@@ -11,7 +11,7 @@ class ProgressInsightsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (BuildContext context, AppState state, Widget? _) {
-        final Map<String, num> stats = state.learningStats;
+        final Map<String, dynamic> stats = state.learningStats;
         return Scaffold(
           appBar: AppBar(title: const Text('Progress insights')),
           body: ListView(
@@ -58,7 +58,7 @@ class ProgressInsightsScreen extends StatelessWidget {
 class _SummaryPanel extends StatelessWidget {
   const _SummaryPanel({required this.stats});
 
-  final Map<String, num> stats;
+  final Map<String, dynamic> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -71,49 +71,36 @@ class _SummaryPanel extends StatelessWidget {
           children: <Widget>[
             Text('Your learning analytics', style: theme.textTheme.titleLarge),
             const SizedBox(height: 20),
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final double maxWidth = constraints.maxWidth == double.infinity
-                    ? MediaQuery.of(context).size.width - 48
-                    : constraints.maxWidth;
-                final double tileWidth = maxWidth > 520 ? (maxWidth - 20) / 2 : maxWidth;
-                return Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  children: <Widget>[
-                    _SummaryTile(
-                      label: 'Avg. overall score',
-                      value: _formatPercent(stats['overallScore']),
-                      icon: Icons.insights_rounded,
-                      width: tileWidth,
-                    ),
-                    _SummaryTile(
-                      label: 'Avg. tajweed score',
-                      value: _formatPercent(stats['tajweedScore']),
-                      icon: Icons.rule_folder_rounded,
-                      width: tileWidth,
-                    ),
-                    _SummaryTile(
-                      label: 'Avg. fluency score',
-                      value: _formatPercent(stats['fluencyScore']),
-                      icon: Icons.graphic_eq_rounded,
-                      width: tileWidth,
-                    ),
-                    _SummaryTile(
-                      label: 'Active streak',
-                      value: '${stats['streak']} days',
-                      icon: Icons.local_fire_department_rounded,
-                      width: tileWidth,
-                    ),
-                    _SummaryTile(
-                      label: 'Guided minutes',
-                      value: '${(stats['hours'] ?? 0).toStringAsFixed(1)} hrs',
-                      icon: Icons.timer_rounded,
-                      width: tileWidth,
-                    ),
-                  ],
-                );
-              },
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: <Widget>[
+                _SummaryTile(
+                  label: 'Avg. overall score',
+                  value: '${stats['overallScore']}%',
+                  icon: Icons.insights_rounded,
+                ),
+                _SummaryTile(
+                  label: 'Avg. tajweed score',
+                  value: '${stats['tajweedScore']}%',
+                  icon: Icons.rule_folder_rounded,
+                ),
+                _SummaryTile(
+                  label: 'Avg. fluency score',
+                  value: '${stats['fluencyScore']}%',
+                  icon: Icons.graphic_eq_rounded,
+                ),
+                _SummaryTile(
+                  label: 'Active streak',
+                  value: '${stats['streak']} days',
+                  icon: Icons.local_fire_department_rounded,
+                ),
+                _SummaryTile(
+                  label: 'Guided minutes',
+                  value: '${double.tryParse(stats['hours'].toString()) != null ? double.parse(stats['hours']).toStringAsFixed(1) : stats['hours']} hrs',
+                  icon: Icons.timer_rounded,
+                ),
+              ],
             ),
           ],
         ),
@@ -127,63 +114,34 @@ class _SummaryTile extends StatelessWidget {
     required this.label,
     required this.value,
     required this.icon,
-    required this.width,
   });
 
   final String label;
   final String value;
   final IconData icon;
-  final double width;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        minWidth: 160,
-        maxWidth: width.clamp(160, 260).toDouble(),
+    return Container(
+      width: 160,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(18),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: <Color>[
-              theme.colorScheme.primary.withOpacity(0.18),
-              theme.colorScheme.secondary.withOpacity(0.14),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.28),
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(8),
-              child: Icon(icon, color: theme.colorScheme.primary),
-            ),
-            const SizedBox(height: 16),
-            FittedBox(
-              alignment: Alignment.centerLeft,
-              child: Text(value, style: theme.textTheme.headlineSmall),
-            ),
-            const SizedBox(height: 10),
-            Text(label, style: theme.textTheme.bodyMedium),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(icon, color: theme.colorScheme.primary),
+          const SizedBox(height: 14),
+          Text(value, style: theme.textTheme.titleLarge),
+          const SizedBox(height: 6),
+          Text(label, style: theme.textTheme.bodyMedium),
+        ],
       ),
     );
   }
-}
-
-String _formatPercent(num? value) {
-  final double safeValue = (value ?? 0).toDouble();
-  return '${safeValue.toStringAsFixed(1)}%';
 }
 
 class _HistoryTile extends StatelessWidget {

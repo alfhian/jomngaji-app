@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
@@ -15,7 +14,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (BuildContext context, AppState state, Widget? _) {
-        final Map<String, num> stats = state.learningStats;
+        final Map<String, dynamic> stats = state.learningStats;
         return Scaffold(
           appBar: AppBar(
             title: Column(
@@ -104,68 +103,50 @@ class _HeroPracticeCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            theme.colorScheme.primary,
-            theme.colorScheme.tertiary.withOpacity(0.85),
-          ],
+        gradient: const LinearGradient(
+          colors: <Color>[Color(0xFF0F4C5C), Color(0xFF1B9AAA)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(28),
       ),
       padding: const EdgeInsets.all(24),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Positioned(
-            right: -12,
-            top: -16,
-            child: Opacity(
-              opacity: 0.35,
-              child: SvgPicture.asset(
-                'assets/illustrations/onboarding_hero.svg',
-                width: 160,
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.22),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    child: const Icon(Icons.auto_graph_rounded, color: Colors.white),
-                  ),
-                  const Spacer(),
-                  Chip(
-                    label: const Text('AI powered'),
-                    backgroundColor: Colors.white.withOpacity(0.18),
-                    labelStyle: theme.textTheme.labelLarge,
-                  ),
-                ],
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.18),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: const Icon(Icons.auto_graph_rounded, color: Colors.white),
               ),
-              const SizedBox(height: 28),
-              Text(
-                'Continue Surah Al-Mulk practice',
-                style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                '3 improvement points identified. Let’s close the gap with a guided session.',
-                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
-              ),
-              const SizedBox(height: 24),
-              PrimaryButton(
-                label: 'Start guided practice',
-                icon: Icons.mic_rounded,
-                onPressed: onStartPractice,
+              const Spacer(),
+              Chip(
+                label: const Text('AI powered'),
+                backgroundColor: Colors.white.withOpacity(0.15),
+                labelStyle: theme.textTheme.labelLarge,
               ),
             ],
+          ),
+          const SizedBox(height: 28),
+          Text(
+            'Continue Surah Al-Mulk practice',
+            style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '3 improvement points identified. Let’s close the gap with a guided session.',
+            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
+          ),
+          const SizedBox(height: 24),
+          PrimaryButton(
+            label: 'Start guided practice',
+            icon: Icons.mic_rounded,
+            onPressed: onStartPractice,
           ),
         ],
       ),
@@ -176,7 +157,7 @@ class _HeroPracticeCard extends StatelessWidget {
 class _StatsRow extends StatelessWidget {
   const _StatsRow({required this.stats});
 
-  final Map<String, num> stats;
+  final Map<String, dynamic> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +173,7 @@ class _StatsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatCard(
-            value: '${(stats['hours'] ?? 0).toStringAsFixed(1)} hrs',
+            value: '${stats['hours']} hrs',
             label: 'Guided time',
             icon: Icons.timer_rounded,
           ),
@@ -200,7 +181,7 @@ class _StatsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatCard(
-            value: '${(stats['overallScore'] ?? 0).toStringAsFixed(1)}%',
+            value: '${stats['overallScore']}%',
             label: 'Avg. score',
             icon: Icons.grade_rounded,
           ),

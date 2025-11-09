@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
@@ -25,7 +24,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'Map your learning path with curated lessons, live coaching, and AI-generated reflections tailored to your pace.',
       icon: Icons.auto_awesome,
       accentColor: Color(0xFF0F4C5C),
-      assetName: 'assets/illustrations/onboarding_hero.svg',
     ),
     _OnboardingPage(
       title: 'AI-Powered Recitation Coach',
@@ -33,7 +31,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'Record your tilawah and receive instant grading aligned with tajweed, fluency, and melody benchmarks.',
       icon: Icons.graphic_eq,
       accentColor: Color(0xFFFA9F42),
-      assetName: 'assets/illustrations/onboarding_hero.svg',
     ),
     _OnboardingPage(
       title: 'Thriving Community Circles',
@@ -41,7 +38,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'Join live halaqah circles, progress with peers, and celebrate weekly recitation streaks together.',
       icon: Icons.groups_rounded,
       accentColor: Color(0xFF2A9D8F),
-      assetName: 'assets/illustrations/onboarding_hero.svg',
     ),
   ];
 
@@ -70,30 +66,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeOutCubic,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: <Color>[
-                                page.accentColor.withOpacity(0.14),
-                                Theme.of(context).colorScheme.secondary.withOpacity(0.16),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          padding: const EdgeInsets.all(24),
-                          child: AspectRatio(
-                            aspectRatio: 4 / 3,
-                            child: SvgPicture.asset(
-                              page.assetName,
-                              key: ValueKey<String>(page.title),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 32),
                         Container(
                           height: 72,
                           width: 72,
@@ -169,12 +141,10 @@ class _OnboardingPage {
     required this.description,
     required this.icon,
     required this.accentColor,
-    required this.assetName,
   });
 
   final String title;
   final String description;
   final IconData icon;
   final Color accentColor;
-  final String assetName;
 }

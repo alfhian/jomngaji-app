@@ -61,9 +61,9 @@ class AppState extends ChangeNotifier {
         },
       ];
 
-  Map<String, num> get learningStats {
+  Map<String, dynamic> get learningStats {
     if (_sessions.isEmpty) {
-      return <String, num>{
+      return <String, dynamic>{
         'streak': 0,
         'hours': 0.0,
         'overallScore': 0.0,
@@ -82,12 +82,12 @@ class AppState extends ChangeNotifier {
         _sessions.fold<double>(0, (double previousValue, RecitationSession element) => previousValue + element.fluencyScore) /
             _sessions.length;
 
-    return <String, num>{
+    return <String, dynamic>{
       'streak': _sessions.length,
-      'hours': double.parse((_sessions.length * 0.5).toStringAsFixed(1)),
-      'overallScore': double.parse(overallScore.toStringAsFixed(1)),
-      'tajweedScore': double.parse(tajweedScore.toStringAsFixed(1)),
-      'fluencyScore': double.parse(fluencyScore.toStringAsFixed(1)),
+      'hours': (_sessions.length * 0.5).toStringAsFixed(1),
+      'overallScore': overallScore.toStringAsFixed(1),
+      'tajweedScore': tajweedScore.toStringAsFixed(1),
+      'fluencyScore': fluencyScore.toStringAsFixed(1),
     };
   }
 
